@@ -4,7 +4,7 @@ Usage: hydrocycler.py file.xyz
 
 A program to find cycles of hydrogen bonding within a molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular bonding. It views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding; that is 
 
-[O-H> -- [O-H> -- [O-H>
+[O-H> - - [O-H> - - [O-H>
 
 is viewed as a graph with three nodes in the left to right direction. The input is a cartesian coordinate file and the output are cartesian coordinate files as well. 
 
