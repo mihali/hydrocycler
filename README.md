@@ -11,6 +11,11 @@ is viewed as a graph with three nodes in the left to right direction. The input 
 Needs johnson.py from https://github.com/qpwo/python-simple-cycles
 Copy of johnson.py may be downloaded from the current repository. 
 
+
+## Installation
+
+git clone https://github.com/mihali/hydrocycler.git
+
 Proven installation procedure (Mac with conda)
 1. Download hydrocycler.py
 2. Make a directory. (mkdir hydrocycler)
