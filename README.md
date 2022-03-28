@@ -6,7 +6,7 @@ A program to find cycles of hydrogen bonding within a molecular cluster and to g
 
 It views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
- **[O-H> - - [O-H> - - [O-H> - - **
+ **\[O-H> - - \[O-H> - - \[O-H> - - **
 
 is viewed as a graph with three nodes in the left to right direction.  The result of a reversal of the above graph would look like
 
