@@ -14,16 +14,16 @@ Copy of johnson.py may be downloaded from the current repository.
 
 ## Installation
 
-git clone https://github.com/mihali/hydrocycler.git
+
 
 Proven installation procedure (Mac with conda)
-1. Download hydrocycler.py
-2. Make a directory. (mkdir hydrocycler)
-3. Move downloaded file to newly created hydrocycler directory. (mv \<srcpath\>/hydrocycler.py \<srcpath\>/johnson.py hydrocycler/ )
-4. Create conda environment. (conda create --name hydrocycler python=3.7)
-5. Activate environment. (conda activate hydrocycler)
-6. Install numpy. (conda install numpy)
-7. Install scipy. (conda install scipy)
+1. Download hydrocycler.py (or git clone https://github.com/mihali/hydrocycler.git and go to step 5)
+3. Make a directory. (mkdir hydrocycler)
+4. Move downloaded file to newly created hydrocycler directory. (mv \<srcpath\>/hydrocycler.py \<srcpath\>/johnson.py hydrocycler/ )
+5. Create conda environment. (conda create --name hydrocycler python=3.7)
+6. Activate environment. (conda activate hydrocycler)
+7. Install numpy. (conda install numpy)
+8. Install scipy. (conda install scipy)
 
 
 
