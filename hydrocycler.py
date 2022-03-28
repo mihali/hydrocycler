@@ -226,9 +226,9 @@ def fn ( inp, file ):
         [ograph, trio] = findcycles (ocoords,  hcoords)
         numcycles = displaycycles(ograph)
     elif choice=='3': #"Save configuration and continue making changes"
-        exportcartesian (xyzdict)
+        exportcartesian (xyzdict, file)
     elif choice=='4': #"Save configuration and start from the beginning"
-        exportcartesian (xyzdict)
+        exportcartesian (xyzdict, file)
         history = []
         ocoords = ocoords_orig
         hcoords = hcoords_orig
