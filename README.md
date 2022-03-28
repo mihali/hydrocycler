@@ -8,24 +8,23 @@ A program to find cycles of hydrogen bonding within a molecular cluster and to g
 
 is viewed as a graph with three nodes in the left to right direction. The input is a cartesian coordinate file and the output are cartesian coordinate files as well. 
 
-Needs johnson.py from https://github.com/qpwo/python-simple-cycles
-Copy of johnson.py may be downloaded from the current repository. 
-
-
 ## Installation
 
+Installation procedure 
+1. git clone https://github.com/mihali/hydrocycler.git 
+2. cd hydrocycler
+3. conda create --name hydrocycler python=3.7 
+4. conda activate hydrocycler
+5. conda install numpy scipy
 
+## Test
 
-Proven installation procedure (Mac with conda)
-1. Download hydrocycler.py (or git clone https://github.com/mihali/hydrocycler.git and go to step 5)
-3. Make a directory. (mkdir hydrocycler)
-4. Move downloaded file to newly created hydrocycler directory. (mv \<srcpath\>/hydrocycler.py \<srcpath\>/johnson.py hydrocycler/ )
-5. Create conda environment. (conda create --name hydrocycler python=3.7)
-6. Activate environment. (conda activate hydrocycler)
-7. Install numpy. (conda install numpy)
-8. Install scipy. (conda install scipy)
+There are files to try in the testfiles directory
+% python hydrocycler.py testfiles/si-4oh-27h2o.xyz
 
+## Reference
 
+1. Uses johnson.py from https://github.com/qpwo/python-simple-cycles
 
 
 
