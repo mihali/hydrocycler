@@ -29,10 +29,10 @@ There are files to try in the testfiles directory, e.g.
 
 % python hydrocycler.py testfiles/si-4oh-27h2o.xyz
 
-## Reference
+## References
 
 1. Uses johnson.py from https://github.com/qpwo/python-simple-cycles
-
+2. Algorithm employed is from Johnson (1975) https://doi.org/10.1137/0204007
 
 
   
