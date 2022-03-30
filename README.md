@@ -1,6 +1,6 @@
 # hydrocycler
 
-Usage: **hydrocycler.py file.xyz**
+Usage: **python hydrocycler.py file.xyz**
 
 A program to find cycles of hydrogen bonding within a molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters serve as input for subsequent energy minimization. 
 
