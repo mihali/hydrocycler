@@ -133,7 +133,7 @@ def fn ( inp, file ):
       [ograph, trio] = findcycles (ocoords,  hcoords)
       cycle = tuple(johnson.simple_cycles(ograph))[choice - 1]
       history.append(cycle)                                     # note it down
-      print(cycle)
+      print([z+1 for z in cycle])
       previous = -1
       hdict = {}
       for node in cycle:
