@@ -2,7 +2,7 @@
 
 Usage: **python hydrocycler.py file.xyz**
 
-A program to find cycles of hydrogen bonding within a molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters serve as input for subsequent energy minimization. 
+An interactive program to find cycles of hydrogen bonding within a molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters serve as input for subsequent energy minimization. 
 
 It views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
@@ -12,7 +12,11 @@ is viewed as a graph with three nodes in the left to right direction.  The resul
 
  O] - - <H-O] - - <H-O] - - <H 
 
-The input is a cartesian coordinate file and the outputs are cartesian coordinate files as well.                             
+The input is a cartesian coordinate file and the outputs are cartesian coordinate files as well.   
+                               
+**pymocyler.py** is a pymol helper script.
+**hydrocycler_engine.py** is an automated script to generate .xyz files and a shell script to execute Gaussian for corresponding .com files. See https://github.com/mihali/gt-x for a quick script to turn .xyz files into .com files.
+ 
                                
 ## Installation
 
