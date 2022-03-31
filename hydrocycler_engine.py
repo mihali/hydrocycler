@@ -30,7 +30,7 @@ hooangle = 0.523599    # 30 degrees
 class Logger(object):
     def __init__(self):
         self.terminal = sys.stdout
-        self.log = open("hydrocycler-%s.out"%ts, "a")
+        self.log = open("hydrocycler_engine-%s.out"%ts, "a")
     def write(self, message):
         self.terminal.write(message)
         self.log.write(message) 
@@ -53,14 +53,15 @@ def exportcartesian (xyzdict, filename):
    for key in xyzdict:
      print(key[0], *(x for x in xyzdict[key]), file=output)
    print('\n\n', file=output)
-  
   fd.flush()
+  return nts  
+
 
 #==============
-def exportbatchjob (filename):
+def exportbatchjob (filename, nts):
   global batchjob
   filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
-  print ("g16 %s-%s.com & \nwait"%(filen,ts), file=batchjob)
+  print ("g16 %s-%s.com & \nwait"%(filen,nts), file=batchjob)
 
 #==============
 def isanhbond(h, o1, o2):
@@ -171,9 +172,9 @@ def fn ( inp, file ):
       i = 0
       while i < numcycles:
         restoredict = modifycycle(i)
-        exportcartesian (xyzdict, file)
+        nts = exportcartesian (xyzdict, file)
         time.sleep(1)
-        exportbatchjob (file)
+        exportbatchjob (file, nts)
         restorecycle (restoredict)
         [ograph, trio] = findcycles (ocoords,  hcoords)    
         i = i + 1
@@ -187,9 +188,9 @@ def fn ( inp, file ):
       numcycles = displaycycles(ograph)       # this is where we begin
       choicei = randint (1, numcycles)
       modifycycle(choicei)  
-      exportcartesian (xyzdict, file)
+      nts = exportcartesian (xyzdict, file)
       time.sleep(1)
-      exportbatchjob (file)
+      exportbatchjob (file, nts)
       traverse (depth - 1)
 
   #--------------
@@ -235,8 +236,8 @@ def fn ( inp, file ):
   [ograph, trio] = findcycles (ocoords,  hcoords)
   history = []
 
-#  traverse(2)
-  sideways(ocoords, hcoords, xcoords)
+  traverse(7)
+##  sideways(ocoords, hcoords, xcoords)
 
 #=============
 print ("\nWelcome to Hydrocycler (c) by Mihali Felipe (2022)\n")
