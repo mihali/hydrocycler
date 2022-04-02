@@ -5,7 +5,7 @@
 
 Usage: **python hydrocycler.py file.xyz**
 
-An interactive program to find cycles of hydrogen bonding within a molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters serve as input for subsequent energy minimization. 
+An interactive script to find cycles of hydrogen bonding within a molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters serve as input for subsequent energy minimization. 
 
 It views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
