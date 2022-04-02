@@ -37,6 +37,10 @@ There are files to try in the testfiles directory, e.g.
 
 % python hydrocycler.py testfiles/si-4oh-27h2o.xyz
 
+## Method
+                               
+<img width="643" alt="Screen Shot 2022-03-31 at 10 59 07 AM" src="https://user-images.githubusercontent.com/10854556/161396405-5fb370f5-307f-4430-8e63-5c5a25d56633.png">
+                               
 ## References
 
 1. Uses johnson.py from https://github.com/qpwo/python-simple-cycles
