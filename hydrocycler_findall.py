@@ -49,6 +49,13 @@ def exportcartesian (xyzdict, fd):
    print('\n\n', file=output)
 
 #==============
+def exportbatchjob (filename):
+  global batchjob
+#  filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
+#  print ("g16 %s-%s.com & \nwait"%(filen,nts), file=batchjob)
+  print ("g16 %s.com & \nwait"%(filename), file=batchjob)
+
+#==============
 def isanhbond(h, o1, o2):
  
   a = h - o1
@@ -181,6 +188,7 @@ def fn ( files ):  # list of filenames
         fd = open("%s-%s.xyz"%(filen,nts), "w")
         fileschild.append("%s-%s.xyz"%(filen,nts))
         exportcartesian(xyzdict, fd)
+        exportbatchjob("%s-%s.xyz"%(filen,nts))
         fd.flush()
     else:
       pass
@@ -192,7 +200,7 @@ def fn ( files ):  # list of filenames
 print (" Calculating directed graphs with |O-H> nodes and H-bond edges.")
 print (" H-bond parameters:")
 print ("   H--O distance: %sA-%sA"%(hobondlim, oobondlim))
-print ("   H-O--O angle:  <%s degrees "%int((hooangle*180/3.14159)))
+print ("   H-O--O angle:  <%s degrees \n"%int((hooangle*180/3.14159)))
 
 batchjob = open("batchjob-%s.sh"%ts, "a") 
 
