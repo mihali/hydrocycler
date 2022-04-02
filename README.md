@@ -15,6 +15,7 @@ is viewed as a graph with three nodes in the left to right direction.  The resul
 The input is a cartesian coordinate file and the outputs are cartesian coordinate files as well.   
                                
 **pymocyler.py** is a pymol helper script to facilitate visualization of H-bonding cycles.
+                               
 **hydrocycler_engine.py** is an automated script to generate .xyz files and a shell script to execute Gaussian for .com files corresponding to these .xyz files. To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.
  
                                
