@@ -91,10 +91,6 @@ def findcycles (ocoords,  hcoords):
   return [ograph, trio]
 
 #==============
-#def isanhbond(hatom, oatom1, oatom2):
-  # h=np.array (hatom)
-  # o1=np.array (oatom1)
-  # o2=np.array (oatom2)
 def isanhbond(h, o1, o2):
 
   a = h - o1
@@ -145,9 +141,9 @@ def createarrays (inp):
 #==============
 def reverseit (o1, o2, h, theta):
 
-  dist = np.absolute(o2-o1)
+  dist = np.linalg.norm(o2-o1)
   unitv = (o2-o1)/dist
-  displacement = dist - 2*np.absolute(h-o1)*np.cos(theta)
+  displacement = dist - 2*np.linalg.norm(h-o1)*np.cos(theta)
   return h + unitv * displacement
 
 #==============
