@@ -93,8 +93,8 @@ def fn ( files ):  # list of filenames
               hdict[('H',trio[(previous, node)][0])] = h
               theta = trio[(previous, node)][1]
               newh = reverseit (o1, o2, h, theta) 
-              hcoords[trio[(previous, node)][0]] = newh                  
-              xyzdict[('H',trio[(previous, node)][0])] = newh          
+              hcoords[trio[(previous, node)][0]] = np.ndarray.tolist(newh)                  
+              xyzdict[('H',trio[(previous, node)][0])] = np.ndarray.tolist(newh)          
             previous = node
       o1 = np.array(ocoords[previous])
       o2 = np.array(ocoords[cycle[0]])
@@ -102,7 +102,8 @@ def fn ( files ):  # list of filenames
       hdict[('H',trio[(previous, cycle[0])][0])] = h
       theta = trio[(previous, cycle[0])][1]
       newh = reverseit (o1, o2, h, theta) 
-      xyzdict[('H',trio[(previous, cycle[0])][0])] = newh
+      hcoords[trio[(previous, cycle[0])][0]] = np.ndarray.tolist(newh)
+      xyzdict[('H',trio[(previous, cycle[0])][0])] = np.ndarray.tolist(newh)
 
   #--------------
   def findcycles (ocoords,  hcoords):
@@ -132,7 +133,28 @@ def fn ( files ):  # list of filenames
         count = count + 1
     return [ograph, trio]
   
-  #=============
+  #-------------
+  def recreatearrays (xyzdict):
+
+    hinput = []
+    oinput = []
+    xinput = []
+  
+    for (toks, count) in xyzdict:
+        if toks == 'H':
+          hinput.append (xyzdict[toks, count])
+        elif toks[0] == 'O':
+          oinput.append (xyzdict[toks, count])
+        else:
+          xinput.append (xyzdict[toks, count]) 
+  
+    ocoords = np.array(oinput)
+    hcoords = np.array(hinput)
+    xcoords = np.array(xinput)
+
+    return [ ocoords, hcoords, xcoords ]
+
+  #--------------
   def createarrays (inp):
 
     hinput = []
@@ -167,34 +189,46 @@ def fn ( files ):  # list of filenames
 
     return [ ocoords, hcoords, xcoords, xyzdict ]
 
+# ------- fn starts here -----------#
+
   fileslocal = files.copy()
   fileschild =[]
-  for file in fileslocal:
+
+  for file in fileslocal:                                     # open up current file
     string = open ( file, 'r' ).readlines()[2:] 
     [ocoords, hcoords, xcoords, xyzdictmaster ] = createarrays (string) 
     [ograph, trio] = findcycles (ocoords, hcoords)
-
-    cycles = sorted(tuple(johnson.simple_cycles(ograph)))
-    cycles_sig = tuple([ x for sublist in cycles for x in sublist ])
+    cycles = sorted(tuple(johnson.simple_cycles(ograph)))            # determine signature
+    cycles_sig = tuple([ x for sublist in cycles for x in sublist ]) # if we've seen cycles before we don't
+                                                                     # follow the cycle
 
     if (cycles_sig) not in cyclesdict:
-      cyclesdict[cycles_sig]="DONE"
+
+      cyclesdict[cycles_sig]="DONE"                             # we've gone through this file
 
       for cycle in cycles:
-        xyzdict = copy.deepcopy(xyzdictmaster) 
-        modifycycle(cycle, xyzdict)
-        nts = datetime.now().strftime("%y%m%d%H%M%S%f")
-        filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
-        fd = open("%s-%s.xyz"%(filen,nts), "w")
-        fileschild.append("%s-%s.xyz"%(filen,nts))
-        exportcartesian(xyzdict, fd)
-        exportbatchjob("%s-%s.xyz"%(filen,nts))
-        fd.flush()
+        xyzdict = copy.deepcopy(xyzdictmaster)                  # each cyle corresponds to a new file
+        modifycycle(cycle, xyzdict)  
+        [ocoords2, hcoords2, xcoords2] = recreatearrays (xyzdict)
+        [ograph2, trio2] = findcycles (ocoords2, hcoords2)
+        cycles2 = sorted(tuple(johnson.simple_cycles(ograph2)))
+        cycles_sig2 = tuple([ x for sublist in cycles2 for x in sublist ])
+        if (cycles_sig2) not in cyclesdict:
+          nts = datetime.now().strftime("%y%m%d%H%M%S%f")         # generate a name
+          filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
+          fd = open("%s-%s.xyz"%(filen,nts), "w")
+          fileschild.append("%s-%s.xyz"%(filen,nts))              # pass these to fn 
+          exportcartesian(xyzdict, fd)
+          exportbatchjob("%s-%s.xyz"%(filen,nts))
+          fd.flush()
     else:
       pass
-
+    
     if len(fileschild) > 0:
-      fn (fileschild) 
+        print (fileschild)
+        fn (fileschild) 
+  
+
 
 #=============
 print (" Calculating directed graphs with |O-H> nodes and H-bond edges.")
@@ -218,6 +252,7 @@ elif argc == 2:
    for filename in argv:
      files.append(filename) 
      fn ( files )
+     
 else:
    print("Usage: %s [file]" % command )
 
