@@ -8,8 +8,9 @@ import numpy as np
 from scipy.spatial import KDTree as kd
 import johnson
 
-ts = datetime.now().strftime("%Y%m%d%H%m%s")
+ts = datetime.now().strftime("%y%m%d%H%M%S%f")
 sys.setrecursionlimit(10000)
+history = []
 
 #==============
 # cutoffs
@@ -34,10 +35,17 @@ class Logger(object):
 sys.stdout = Logger()
 
 #==============
+def gettrio (inp):
+
+    [ ocoords, hcoords, xcoords, xyzdict1 ] = createarrays (inp)
+    [ograph, trio1] = findcycles (ocoords,  hcoords)
+    return trio1
+
+#==============
 def exportcartesian (xyzdict, filename):
   # Tee output to stdout and a file
 
-  nts = datetime.now().strftime("%Y%m%d%H%m%s")
+  nts = datetime.now().strftime("%y%m%d%H%M%S%f")
   filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
   fd = open("%s-%s.xyz"%(filen,nts), "w")
   outputs = [sys.stdout, fd ]
@@ -63,32 +71,69 @@ def displaycycles (ograph):
   return count - 1
 
 #==============
+def modifycycles(xyzdict): 
+
+  [ocoords, hcoords, xcoords] = recreatearrays (xyzdict)
+  [ograph, trio2] = findcycles (ocoords, hcoords)  
+  numcycles = displaycycles(ograph)
+  print ("\nEnter a cycle to reverse. Enter nothing to get back to menu: ", end='')
+  loop=True       
+  while loop:
+    choice = input()
+    choicei = int(choice)
+    if choice=="":
+      loop=False
+      return
+    elif choice.isnumeric() and choicei > 0 and choicei <= numcycles:
+      cycle = tuple(johnson.simple_cycles(ograph))[choicei - 1]
+      history.append(cycle)                                     # note it down
+      previous = -1
+      for node in cycle:
+          if (previous, node) in trio:
+              newh = trio[(node, previous)][2]                  
+              xyzdict[('H',trio[(previous, node)][0])] = newh          
+          previous = node
+      newh = trio[(cycle[0], previous)][2] 
+      xyzdict[('H',trio[(previous, cycle[0])][0])] = newh
+      loop=False
+      return xyzdict
+    else:
+      print ("Please enter a cycle to reverse. Enter nothing to get back to menu: ", end='')
+
+#=============
 def findcycles (ocoords,  hcoords):
 
-  okdt = kd(ocoords)                    # kdtree to find neighbors
-  hkdt = kd(hcoords)
+    okdt = kd(ocoords)                    # kdtree to find neighbors
+    hkdt = kd(hcoords)
 
-  count = 0
-  ograph = {}
-  trio = {}
-  for oatom in ocoords:                 # go through each O coordinate
-      oidx = okdt.query_ball_point(oatom, r=oobondlim )  # an O atom has neighbors
-      for neighoidx in oidx:               # oxygen pair pair to test H-bond connection
-        dist = np.linalg.norm(oatom - ocoords[neighoidx])
-        if dist > 0.01:                     # exclude itself from generating the trio 
-          hidx = hkdt.query_ball_point(oatom, r=hobondlim)
-          for neighhidx in hidx:            
-                hbondtest = isanhbond(hcoords[neighhidx], oatom, ocoords[neighoidx]) # isanhbond returns [flag, theta]
-                if hbondtest[0] == 1:           # found an H-bond 
-                    trio [(count,neighoidx)] = [neighhidx, hbondtest[1]]
-                    if count in ograph:
-                      ograph[count].append(neighoidx)
-                    else:
-                      ograph[count] = [neighoidx]
-      if count not in ograph:                   # terminal OH need keys
-          ograph[count] = []
-      count = count + 1
-  return [ograph, trio]
+    count = 0
+    ograph = {}
+    trio1 = {}
+
+    for oatom in ocoords:                 # go through each O coordinate
+        oidx = okdt.query_ball_point(oatom, r=oobondlim )  # an O atom has neighbors
+        for neighoidx in oidx:               # oxygen pair pair to test H-bond connection
+            dist = np.linalg.norm(oatom - ocoords[neighoidx])
+            if dist > 0.01:                     # exclude itself from generating the trio1 
+                hidx = hkdt.query_ball_point(oatom, r=hobondlim)
+                for neighhidx in hidx:    
+                    hbondtest = isanhbond(hcoords[neighhidx], oatom, ocoords[neighoidx]) 
+                    if hbondtest[0] == 1:                                     # found an H-bond 
+                        trio1 [(count,neighoidx)] = [neighhidx, hbondtest[1], hcoords[neighhidx]] 
+                        o2 = ocoords[neighoidx]
+                        o1 = ocoords[count]
+                        h  = hcoords[neighhidx]
+                        newh = reverseit (o1, o2, h, hbondtest[1])
+                        trio1 [(neighoidx, count)] = [neighhidx, hbondtest[1], newh]
+                        if count in ograph:
+                            ograph[count].append(neighoidx)
+                        else:
+                            ograph[count] = [neighoidx]
+        if count not in ograph:                   # terminal OH need keys
+            ograph[count] = []
+        count = count + 1
+    return [ograph, trio1]
+
 
 #==============
 def isanhbond(h, o1, o2):
@@ -103,40 +148,61 @@ def isanhbond(h, o1, o2):
   else:
     return [0, 0.0]     
 
-#=============
+#===============
 def createarrays (inp):
 
- hinput = []
- oinput = []
- xinput = []
- xyzdict = {}
- ocount = 0
- hcount = 0
- xcount = 0
- 
- for line in inp:
-   toks = line.split()
-   count = 0
-   if len(toks) >= 3:
-     if toks[0] == 'H':
-       hinput.append ([float(toks[1]), float(toks[2]), float(toks[3])])
-       count = hcount
-       hcount = hcount + 1
-     elif toks[0] == 'O':
-       oinput.append([float(toks[1]), float(toks[2]), float(toks[3])])
-       count = ocount 
-       ocount = ocount + 1
-     else:
-       xinput.append([float(toks[1]), float(toks[2]), float(toks[3])])     
-       count = xcount
-       xcount = xcount + 1        
-     xyzdict [(toks[0], count)] = [float(toks[1]), float(toks[2]), float(toks[3])]  
+    hinput = []
+    oinput = []
+    xinput = []
+    xyzdict1 = {}
+    ocount = 0
+    hcount = 0
+    xcount = 0
 
- ocoords = np.array(oinput)
- hcoords = np.array(hinput)
- xcoords = np.array(xinput)
+    for line in inp:
+        toks = line.split()
+        count = 0
+        if len(toks) >= 3:
+            if toks[0] == 'H':
+                hinput.append ([float(toks[1]), float(toks[2]), float(toks[3])])
+                count = hcount
+                hcount = hcount + 1
+            elif toks[0] == 'O':
+                oinput.append([float(toks[1]), float(toks[2]), float(toks[3])])
+                count = ocount 
+                ocount = ocount + 1
+            else:
+                xinput.append([float(toks[1]), float(toks[2]), float(toks[3])])     
+                count = xcount
+                xcount = xcount + 1        
+            xyzdict1 [(toks[0], count)] = np.array([ float(toks[1]), float(toks[2]), float(toks[3]) ])  
 
- return [ ocoords, hcoords, xcoords, xyzdict ]
+    ocoords = np.array(oinput)
+    hcoords = np.array(hinput)
+    xcoords = np.array(xinput)
+
+    return [ ocoords, hcoords, xcoords, xyzdict1 ]
+
+#=============
+def recreatearrays (xyzdict):
+
+    hinput = []
+    oinput = []
+    xinput = []
+  
+    for (toks, count) in xyzdict:
+        if toks == 'H':
+          hinput.append (xyzdict[toks, count])
+        elif toks[0] == 'O':
+          oinput.append (xyzdict[toks, count])
+        else:
+          xinput.append (xyzdict[toks, count]) 
+  
+    ocoords = np.array(oinput)
+    hcoords = np.array(hinput)
+    xcoords = np.array(xinput)
+
+    return [ ocoords, hcoords, xcoords ]
 
 #==============
 def reverseit (o1, o2, h, theta):
@@ -152,6 +218,7 @@ def printhistory(history):
     for x in history:
         print ([z+1 for z in x])  
 
+#==============
 def print_menu(): 
     print ("\n============ H Y D R O C Y C L E R =================")      
     print (" 1. Show H-bond cycles")
@@ -167,86 +234,44 @@ def print_menu():
 #==============
 def fn ( inp, file ):
  
- [ocoords, hcoords, xcoords, xyzdict ] = createarrays (inp) 
- history = []
- ocoords_orig = copy.deepcopy(ocoords)
- hcoords_orig = copy.deepcopy(hcoords)
- xyzdict_orig = copy.deepcopy(xyzdict)
+  global trio
+  [ocoords, hcoords, xcoords, xyzdictmaster ] = createarrays (inp) 
+  [ograph, trio] = findcycles (ocoords,  hcoords)
+  xyzdict = copy.deepcopy(xyzdictmaster)                  
 
- [ograph, trio] = findcycles (ocoords,  hcoords)
- 
- def modifycycles(numcycles): 
-  print ("\nEnter a cycle to reverse. Enter nothing to get back to menu: ", end='')
+  # Ye Old-School menu #
   loop=True       
-  while loop:
-    choice = input()
-    choicei = int(choice)
-    if choice=="":
-      loop=False
-      return
-    elif choice.isnumeric() and choicei > 0 and choicei <= numcycles:
-      cycle = tuple(johnson.simple_cycles(ograph))[choicei - 1]
-      history.append(cycle)                                     # note it down
-      previous = -1
-      for node in cycle:
-        if (previous, node) in trio:
-          o1 = np.array(ocoords[previous])
-          o2 = np.array(ocoords[node])
-          h  = np.array(hcoords[trio[(previous, node)][0]])
-          theta = trio[(previous, node)][1]
-          newh = reverseit (o1, o2, h, theta) 
-          hcoords[trio[(previous, node)][0]] = newh                  
-          xyzdict[('H',trio[(previous, node)][0])] = newh          
-        previous = node
-      o1 = np.array(ocoords[previous])
-      o2 = np.array(ocoords[cycle[0]])
-      h  = np.array(hcoords[trio[(previous, cycle[0])][0]])
-      theta = trio[(previous, cycle[0])][1]
-      newh = reverseit (o1, o2, h, theta) 
-      hcoords[trio[(previous, cycle[0])][0]] = newh
-      xyzdict[('H',trio[(previous, cycle[0])][0])] = newh
-      loop=False
-      return
-    else:
-      print ("Please enter a cycle to reverse. Enter nothing to get back to menu: ", end='')
+  while loop:          
+      print_menu()    
+      choice = input()
 
- ######################
- # Ye Old-School menu #
- # ####################
- loop=True       
- while loop:          
-    print_menu()    
-    choice = input()
-
-    if choice =='1':
-        numcycles = displaycycles(ograph)
-    elif choice=='2':   #"Show cycles (Johnson, 1975) and choose cycle for reversal")
-        numcycles = displaycycles(ograph)
-        modifycycles(numcycles)   
-        [ograph, trio] = findcycles (ocoords,  hcoords)
-        numcycles = displaycycles(ograph)
-    elif choice=='3': #"Save configuration and continue making changes"
-        exportcartesian (xyzdict, file)
-    elif choice=='4': #"Save configuration and start from the beginning"
-        exportcartesian (xyzdict, file)
-        history = []
-        ocoords = ocoords_orig
-        hcoords = hcoords_orig
-        xyzdict = xyzdict_orig
-        [ograph, trio] = findcycles (ocoords,  hcoords)
-    elif choice=='5': #"Save configuration and exit"
-        exportcartesian (xyzdict, file)
-        print("Session log file: hydrocycler-%s.out"%ts)
-        print("Thank you for using Hydrocycler!\n")
-        loop=False
-    elif choice=='6':
-        printhistory(history)
-    elif choice=='7':
-        print("Session log file: hydrocycler-%s.out"%ts)
-        print("Thank you for using Hydrocycler!\n")
-        loop=False 
-    else:
-        print("Enter any key between 1-7")
+      if choice =='1':
+          numcycles = displaycycles(ograph)
+      elif choice=='2':   #"Show cycles (Johnson, 1975) and choose cycle for reversal")
+          xyzdict = modifycycles(xyzdict)   
+          [ocoords, hcoords, xcoords] = recreatearrays (xyzdict)
+          [ograph, trio1] = findcycles (ocoords, hcoords)
+          numcycles = displaycycles(ograph)
+      elif choice=='3': #"Save configuration and continue making changes"
+          exportcartesian (xyzdict, file)
+      elif choice=='4': #"Save configuration and start from the beginning"
+          exportcartesian (xyzdict, file)
+          xyzdict = copy.deepcopy(xyzdictmaster)
+          [ocoords, hcoords, xcoords] = recreatearrays (xyzdict)
+          [ograph, trio1] = findcycles (ocoords, hcoords)
+      elif choice=='5': #"Save configuration and exit"
+          exportcartesian (xyzdict, file)
+          print("Session log file: hydrocycler-%s.out"%ts)
+          print("\n\nThank you for using Hydrocycler!\n\n")
+          loop=False
+      elif choice=='6':
+          printhistory(history)
+      elif choice=='7':
+          print("Session log file: hydrocycler-%s.out"%ts)
+          print("Thank you for using Hydrocycler!\n") 
+          loop=False 
+      else:
+          print("Enter any key between 1-7")
 
 #=============
 print ("\nWelcome to Hydrocycler (c) by Mihali Felipe (2022)\n")
@@ -258,14 +283,18 @@ print ("   H-O--O angle:  <%s degrees "%int((hooangle*180/3.14159)))
 files = sys.argv[1:]
 argc  = len(sys.argv)
 command = sys.argv[0].split('/')[len(sys.argv[0].split('/')) - 1] 
-
 if not files:
    print("Usage: %s [file]" % command )
    print ("No stdin option for this command. Use file argument")
 elif argc == 2:
    for file in files:
-     string = open ( file, 'r' ).readlines()[2:]
-     fn ( string, file )
+        string = open ( file, 'r' ).readlines()[2:]
+        trio = gettrio (string)
+        print ("Processing with trios:")
+        for key in trio:
+            print ("\t%s\t%s"%(str(key),str(trio[key])) , )
+        fn ( string, file )
+        print ("\n\nThank you for using Hydrocycler!\n\n")
 else:
    print("Usage: %s [file]" % command )
 
