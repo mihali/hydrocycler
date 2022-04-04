@@ -23,6 +23,7 @@ hooangle = 0.523599    # 30 degrees
 #==============
 # Log all output 
 class Logger(object):
+
     def __init__(self):
         self.terminal = sys.stdout
         self.log = open("hydrocycler-%s.out"%ts, "a")
@@ -32,6 +33,7 @@ class Logger(object):
     def flush(self): 
         self.terminal.flush(); 
         self.log.flush()
+        
 sys.stdout = Logger()
 
 #==============
@@ -40,6 +42,13 @@ def gettrio (inp):
     [ ocoords, hcoords, xcoords, xyzdict1 ] = createarrays (inp)
     [ograph, trio1] = findcycles (ocoords,  hcoords)
     return trio1
+
+#==============
+def printtrio ():
+
+    print ("Processing with trios:")
+    for key in trio:
+        print ("\t%s\t%s"%(str(key),str(trio[key])) , )
 
 #==============
 def exportcartesian (xyzdict, filename):
@@ -134,7 +143,6 @@ def findcycles (ocoords,  hcoords):
         count = count + 1
     return [ograph, trio1]
 
-
 #==============
 def isanhbond(h, o1, o2):
 
@@ -214,19 +222,21 @@ def reverseit (o1, o2, h, theta):
 
 #==============
 def printhistory(history):
-    print ("Cycle Reversal History:")
+
+    print ("\nCycle Reversal History. Null ([]) means reset.:")
     for x in history:
         print ([z+1 for z in x])  
 
 #==============
 def print_menu(): 
+
     print ("\n============ H Y D R O C Y C L E R =================")      
     print (" 1. Show H-bond cycles")
     print (" 2. Show cycles and choose cycle for reversal")
     print (" 3. Save configuration and continue making changes")
     print (" 4. Save configuration and start from the beginning")
     print (" 5. Save configuration and exit")
-    print (" 6. Show cycle reversal history for current configuration")
+    print (" 6. Show cycle reversal history for this session")
     print (" 7. Exit")
     print ("====================================================\n")      
     print ("Enter your choice [1-7]: ", end='') 
@@ -259,16 +269,15 @@ def fn ( inp, file ):
           xyzdict = copy.deepcopy(xyzdictmaster)
           [ocoords, hcoords, xcoords] = recreatearrays (xyzdict)
           [ograph, trio1] = findcycles (ocoords, hcoords)
+          history.append([])
       elif choice=='5': #"Save configuration and exit"
           exportcartesian (xyzdict, file)
           print("Session log file: hydrocycler-%s.out"%ts)
-          print("\n\nThank you for using Hydrocycler!\n\n")
           loop=False
       elif choice=='6':
           printhistory(history)
       elif choice=='7':
           print("Session log file: hydrocycler-%s.out"%ts)
-          print("Thank you for using Hydrocycler!\n") 
           loop=False 
       else:
           print("Enter any key between 1-7")
@@ -290,9 +299,6 @@ elif argc == 2:
    for file in files:
         string = open ( file, 'r' ).readlines()[2:]
         trio = gettrio (string)
-        print ("Processing with trios:")
-        for key in trio:
-            print ("\t%s\t%s"%(str(key),str(trio[key])) , )
         fn ( string, file )
         print ("\n\nThank you for using Hydrocycler!\n\n")
 else:
