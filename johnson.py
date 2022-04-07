@@ -112,7 +112,7 @@ def subgraph(G, vertices):
 # graph = {0: [7, 3, 5], 1: [2], 2: [7, 1], 3: [0, 5], 4: [6, 8], 5: [0, 3, 7], 6: [4, 8], 7: [0, 2, 5, 8], 8: [4, 6, 7]}
 # print(tuple(simple_cycles(graph)))
 
-This is a modified version of one function from NetworkX.
+# This is a modified version of one function from NetworkX.
 # Not endorsed by the original authors.
 
 # Original License
