@@ -222,7 +222,7 @@ def fn ( files ):
                     fileschild.append("%s-%s.xyz"%(filen,nts))              # pass these to fn 
                     exportcartesian(xyzdict, fd)
                     exportbatchjob("%s-%s.xyz"%(filen,nts))
-                    fd.flush()
+                    fd.close()
 #                else:
 #                    pass
  
