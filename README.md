@@ -19,7 +19,7 @@ The input is a cartesian coordinate file and the outputs are cartesian coordinat
                                
 **pymocyler.py** is a pymol helper script to facilitate visualization of H-bonding cycles.
                                
-**hydrocycler_engine.py** is an automated script to generate .xyz files and a shell script to execute Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
+**hydrocycler_findall.py** is an automated script to generate .xyz files, and to generate a bash script to execute Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
  
                                
 ## Installation
