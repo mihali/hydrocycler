@@ -1,9 +1,9 @@
-# Source: https://github.com/qpwo/python-simple-cycles/blob/master/johnson.py
-# A dependency-free version of networkx's implementation of Johnson's cycle finding algorithm
-# Original implementation: https://github.com/networkx/networkx/blob/master/networkx/algorithms/cycles.py#L109
+# A dependency-free version of NetworkX's implementation of Johnson's cycle finding algorithm
+# This implementation: https://github.com/qpwo/python-simple-cycles/blob/master/johnson.py
+# Original implementation from NetworkX: 
+# https://github.com/networkx/networkx/blob/master/networkx/algorithms/cycles.py#L109
 # See License at the end of this file.
-# Original paper: Donald B Johnson. "Finding all the elementary circuits of a directed graph." SIAM Journal on Computing. 1975.
-
+# Reference: Donald B Johnson. "Finding all the elementary circuits of a directed graph." SIAM Journal on Computing. 1975.
 
 
 from collections import defaultdict
@@ -109,13 +109,11 @@ def subgraph(G, vertices):
     # Expects values of G to be sets
     return {v: G[v] & vertices for v in vertices}
 
+# Example:
 # graph = {0: [7, 3, 5], 1: [2], 2: [7, 1], 3: [0, 5], 4: [6, 8], 5: [0, 3, 7], 6: [4, 8], 7: [0, 2, 5, 8], 8: [4, 6, 7]}
 # print(tuple(simple_cycles(graph)))
 
-# This is a modified version of one function from NetworkX.
-# Not endorsed by the original authors.
-
-# Original License
+# Original License:
 # =======
 
 # NetworkX is distributed with the 3-clause BSD license.
