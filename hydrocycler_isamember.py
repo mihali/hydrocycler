@@ -1,6 +1,6 @@
 #=============
 print ("\nWelcome to Hydrocycler (c) by Mihali Felipe (2022)\n")
-print ("Checking against a previously generated signature file")
+print ("Checking against a previously generated signature file: ", end="")
 
 import sys
 from datetime import datetime
@@ -70,8 +70,8 @@ def createarrays (inp):
     xcoords = np.array(xinput)
 
     return [ ocoords, hcoords, xcoords, xyzdict ]
-  
-  def findcycles (ocoords,  hcoords):
+
+def findcycles (ocoords,  hcoords):
 
     okdt = kd(ocoords)                    # kdtree to find neighbors
     hkdt = kd(hcoords)
@@ -119,10 +119,9 @@ def fn (sig_dict, xyzfile):
     cycles = sorted(tuple(johnson.simple_cycles(ograph)))
     cycles_sig = tuple([ x for sublist in cycles for x in sublist ])
     if cycles_sig in sig_dict:
-        print ("%s is in the H-bond family defined by the signature file."%xyzfile)
+        print ("%s is in the H-bond family defined by signature file."%xyzfile)
     else:
-        print ("%s is NOT in H-bond family defined by the signature file."%xyzfile)
-
+        print ("%s is NOT in H-bond family defined by signature file."%xyzfile)
 
 files = sys.argv[1:]
 argc  = len(sys.argv)
@@ -131,13 +130,14 @@ if not files:
    print("Usage: %s cartesianfile.xyz signaturefile.sig" % command )
    print ("No stdin option for this command. Use file argument")
 elif argc > 3:
+   print("%s\n"%files[0])
    with open(files[0], 'rb') as signature:
        sig_db = signature.read()
    sig_dict = pickle.loads(sig_db)  
    for file in files[1:]:
-        print(file)
         fn ( sig_dict, file )
    print ("\n\nThank you for using Hydrocycler!\n\n")
 else:
    print("Usage: %s signaturefile.sig cartesianfiles.xyz ..." % command )
+
 
