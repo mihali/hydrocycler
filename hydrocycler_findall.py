@@ -255,6 +255,10 @@ elif argc == 2:
      for key in trio:
          print ("\t%s\t%s"%(str(key),str(trio[key])) , )
      fn ( files )
+     print ("\n\nThank you for using Hydrocycler!\n\n")
+     sigdict_fd = open ("%s-%s.sig"%(filename,ts), "w")
+     print (cyclesdict, file = sigdict_fd )
+
 else:
    print("Usage: %s [file]" % command )
 
