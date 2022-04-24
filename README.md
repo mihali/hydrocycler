@@ -1,23 +1,24 @@
 <img width="400" alt="Screen Shot 2022-03-30 at 9 59 51 AM" src="https://user-images.githubusercontent.com/10854556/161368022-17f12de8-4c98-483b-9340-e24c68c5e86b.png">
 
-
 # hydrocycler
 
-Usage: **python hydrocycler_findall.py file.xyz**                               
-                               
-**hydrocycler_findall.py** is the workhorse program. It is an automated script that generates .xyz files, and a bash script for executing Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.) It also generates a signature (.sig) file that defines the H-bonding family from which the input file belongs. This signature file can then be used to test xyz files whether they fall under the same family. See **hydrocycler_isamember.py** below
-
-Usage: **python hydrocycler.py file.xyz**
-
-An instructive interactive script to understand **hydrocycler_findall.py**. It find cycles of hydrogen bonding within a (ideally optimized) molecular cluster and generates derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters then serve as input for subsequent energy minimization. 
-
-It views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
+The Hydrocycler suite of programs view the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
  \[O-H> - - \[O-H> - - \[O-H> - - 
 
 is viewed as a graph with three nodes in the rightward direction.  The result of a reversal of the graph above would look like
 
  O] - - <H-O] - - <H-O] - - <H 
+
+
+Usage: **python hydrocycler_findall.py file.xyz**                               
+                               
+**hydrocycler_findall.py** is the workhorse program. It is an automated script that generates .xyz files of polycyclomorphs. It also generates a signature (.sig) file that defines the H-bonding family from which the input file belongs. This signature file can then be used to test xyz files whether they fall under the same family. See **hydrocycler_isamember.py** below. For convenience, **hydrocycler_findall.py** also creates a bash script for executing Gaussian .com files corresponding to the generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
+
+Usage: **python hydrocycler.py file.xyz**
+
+An instructive interactive script to understand **hydrocycler_findall.py**. It find cycles of hydrogen bonding within a (ideally optimized) molecular cluster and generates derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters then serve as input for subsequent energy minimization. 
+
 
 The input is a cartesian coordinate file and the outputs are cartesian coordinate files as well.   
 
