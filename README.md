@@ -5,7 +5,7 @@
 
 Usage: **python hydrocycler_findall.py file.xyz**                               
                                
-**hydrocycler_findall.py** is the workhorse program. It is an automated script to generate .xyz files, and to generate a bash script to execute Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.) It also generates a signature file that describes the H-bonding family of the .xyz file input. This signature file can then be used to test xyz files if they fall under the same family.
+**hydrocycler_findall.py** is the workhorse program. It is an automated script that generates .xyz files, and a bash script for executing Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.) It also generates a signature (.sig) file that defines the H-bonding family from which the input file belongs. This signature file can then be used to test xyz files whether they fall under the same family. See **hydrocycler_isamember.py** below
 
 Usage: **python hydrocycler.py file.xyz**
 
