@@ -3,9 +3,13 @@
 
 # hydrocycler
 
+Usage: **python hydrocycler_findall.py file.xyz**                               
+                               
+**hydrocycler_findall.py** is the workhorse program. It is an automated script to generate .xyz files, and to generate a bash script to execute Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.) It also generates a signature file that describes the H-bonding family of the .xyz file input. This signature file can then be used to test xyz files if they fall under the same family.
+
 Usage: **python hydrocycler.py file.xyz**
 
-An instructive interactive script to find cycles of hydrogen bonding within an optimized molecular cluster and to generate derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters then serve as input for subsequent energy minimization. 
+An instructive interactive script to understand **hydrocycler_findall.py**. It find cycles of hydrogen bonding within a (ideally optimized) molecular cluster and generates derivative molecular clusters by reversing the direction of the molecular- and H-bonding. These derivative molecular clusters then serve as input for subsequent energy minimization. 
 
 It views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
@@ -17,9 +21,7 @@ is viewed as a graph with three nodes in the rightward direction.  The result of
 
 The input is a cartesian coordinate file and the outputs are cartesian coordinate files as well.   
 
-Usage: **python hydrocycler_findall.py file.xyz**                               
-                               
-**hydrocycler_findall.py** is the workhorse program. It is an automated script to generate .xyz files, and to generate a bash script to execute Gaussian .com files corresponding to these generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.) It also generates a signature file that describes the H-bonding family of the .xyz file input. This signature file can then be used to test xyz files if they fall under the same family. 
+ 
                                
 Usage: **python hydrocycler_isamember.py file0.sig fileA.xyz fileB.xyz ...**
                                
