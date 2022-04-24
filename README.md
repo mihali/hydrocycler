@@ -13,7 +13,7 @@ is viewed as a graph with three nodes in the rightward direction.  The result of
 
 Usage: **python hydrocycler_findall.py file.xyz**                               
                                
-**hydrocycler_findall.py** is the workhorse program. It is an automated script that generates .xyz files of polycyclomorphs. It also generates a signature (.sig) file that defines the H-bonding family from which the input file belongs. This signature file can then be used to test xyz files whether they fall under the same family. See **hydrocycler_isamember.py** below. For convenience, **hydrocycler_findall.py** also creates a bash script for executing Gaussian .com files corresponding to the generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
+**hydrocycler_findall.py** is the workhorse program. It is an automated script that generates .xyz files of polycyclomorphs. It also generates a signature (.sig) file that defines the H-bonding family from which the input file belongs. This signature file can then be used to test other configurations for H-bonding family membership. (See **hydrocycler_isamember.py** below for usage.) For convenience, **hydrocycler_findall.py** also creates a bash script for executing Gaussian .com files corresponding to the generated .xyz files. (To create .xyz files into .com files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
 
 Usage: **python hydrocycler.py file.xyz**
 
