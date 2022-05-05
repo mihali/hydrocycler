@@ -1,2 +1,2 @@
-* Currently handles only space delimited cartesian coordinate files.
+* Currently handles only space-delimited cartesian coordinate files.
 * The ledger (.sig) file is pickle library dependent because of the changes in pickle. It is best to regenerate it using hydrocycler_findall.py
