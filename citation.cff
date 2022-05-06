@@ -4,7 +4,7 @@ authors:
 - family-names: Felipe
   given-names: Mihali
   orcid: https://orcid.org/0000-0002-9379-0843
-  affiliation
+  affiliation: Yale University
 title: Hydrocycler
 version: 1.0.0
 doi: 10.5281/zenodo.6522978
