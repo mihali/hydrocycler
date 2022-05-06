@@ -38,7 +38,7 @@ Procedure
 
 ## Method
 
-H-bonds can be determined from the cartesian coordinates of a cluster by measuring O-O distances between nearest neighbors and then taking H-O-O angles. A quick algorithm to perform a nearest neighbor search is by KDtree. After H-bonds have been identified in the cluster, the information can be defined as a "trio" consisting of the proton-donor oxygen, the acceptor oxygen, and the hydrogen. These can be imagined as forming a triangle. By pre-computing all the hydrogen positions where the donor and acceptor roles are swapped, reversals of cycles can easily be performed. 
+H-bonds can be determined from the cartesian coordinates of a cluster by measuring O-O distances between nearest neighbors and then taking H-O-O angles. A quick algorithm to perform a nearest neighbor search is by KDtree. The information of the H-bonds are held in a data structure called a "trio", which consists of the cartesian coordinates of the two oxygens, and the one hydrogen in the donor and acceptor roles. A reversal of a cycle can easily be performed because these coordinates have been precomputed.
                                
 <img width="400" alt="Screen Shot 2022-03-31 at 10 59 07 AM" src="https://user-images.githubusercontent.com/10854556/161396405-5fb370f5-307f-4430-8e63-5c5a25d56633.png">
 
