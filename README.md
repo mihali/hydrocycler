@@ -2,7 +2,7 @@
 
 # Hydrocycler
 
-The Hydrocycler suite of programs views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
+The Hydrocycler set of programs views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
  \[O-H> - - \[O-H> - - \[O-H> - - 
 
