@@ -127,9 +127,9 @@ files = sys.argv[1:]
 argc  = len(sys.argv)
 command = sys.argv[0].split('/')[len(sys.argv[0].split('/')) - 1] 
 if not files:
-   print("Usage: %s cartesianfile.xyz signaturefile.sig" % command )
+   print("Usage: %s signaturefile.sig cartesianfiles.xyz ..." % command )
    print ("No stdin option for this command. Use file argument")
-elif argc > 3:
+elif argc > 2:
    print("%s\n"%files[0])
    with open(files[0], 'rb') as signature:
        sig_db = signature.read()

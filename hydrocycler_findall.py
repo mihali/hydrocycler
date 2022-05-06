@@ -194,16 +194,16 @@ def fn ( files ):
 
     fileslocal = files.copy()
     fileschild =[]
-
+    
     for file in fileslocal:                                     # open up current file
-        print ("Processing %s for cycles"%file)
+        print ("Processing %s for cycles..."%file)
         string = open ( file, 'r' ).readlines()[2:] 
         [ocoords1, hcoords1, xcoords1, xyzdictmaster] = createarrays (string) 
         [ograph1, trio1] = findcycles (ocoords1, hcoords1)
         cycles = tuple(johnson.simple_cycles(ograph1))            # determine signature using
         cycles_srt = sorted(tuple(johnson.simple_cycles(ograph1)))            # determine signature using
         cycles_sig = tuple([ x for sublist in cycles_srt for x in sublist ]) # cycles for uniqueness 
-        print ("   has signature %s"%str(cycles_sig))
+        print ("This configuration has signature: %s"%str(cycles_sig))
         if (cycles_sig) not in cyclesdict:
             cyclesdict[cycles_sig]="DONE"                             # mark this file read
 

@@ -1,5 +1,4 @@
 #!/usr/bin/env  python  
-# This version takes one file input
 
 import sys, os
 import copy, time
@@ -7,7 +6,6 @@ from datetime import datetime
 import numpy as np
 from scipy.spatial import KDTree as kd
 import johnson
-from random import randint
 
 ts = datetime.now().strftime("%y%m%d%H%M%S%f")
 sys.setrecursionlimit(10000)
@@ -17,7 +15,6 @@ sys.setrecursionlimit(10000)
 oobondlim = 3.2
 hobondlim = 1.2
 hooangle = 0.523599    # 30 degrees
-# hooangle = 0.785398    #  45 degrees
 
 #==============
 # Log all output 
@@ -143,5 +140,5 @@ else:
   for file in argv:
     fn ( [file] )
 print ("Sig ln\tMax ln\tCyc ct\File\n\n")
-print ("       Please see hydrocycler_counter-%s.csv"%ts)
-
+print ("Please see hydrocycler_counter-%s.csv"%ts)
+print ("\n\nThank you for using Hydrocycler!\n\n")
