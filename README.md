@@ -10,7 +10,7 @@ is viewed as a graph with three nodes in the rightward direction.  The result of
 
  O] - - <H-O] - - <H-O] - - <H 
 
-Because neutrality is preferred over charge separation, it is hypothesized that most proton transfers occur in directed rings or cycles. By the reversal of cycles and subsequent successful optimization, polycyclomporphs are obtained. Proto-polycyclomorphs are the configurations before optimization.                              
+Because neutrality is preferred over charge separation, it is hypothesized that most proton transfers occur in directed rings or cycles. By the reversal of cycles and subsequent successful optimization, polycyclomorphs are obtained. Proto-polycyclomorphs are the configurations before optimization.                              
 
 * Usage: **python hydrocycler.py file.xyz**
 
