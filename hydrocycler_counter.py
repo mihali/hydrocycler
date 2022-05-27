@@ -6,15 +6,9 @@ from datetime import datetime
 import numpy as np
 from scipy.spatial import KDTree as kd
 import johnson
+from hydrocycler_utils import *
 
 ts = datetime.now().strftime("%y%m%d%H%M%S%f")
-sys.setrecursionlimit(10000)
-
-#==============
-# cutoffs
-oobondlim = 3.2
-hobondlim = 1.2
-hooangle = 0.523599    # 30 degrees
 
 #==============
 # Log all output 
@@ -32,19 +26,6 @@ class Logger(object):
         self.log.flush()
 
 sys.stdout = Logger()
-
-#==============
-def isanhbond(h, o1, o2):
- 
-  a = h - o1
-  ia = a/np.linalg.norm(a)
-  b = o2 - o1
-  ib = b/np.linalg.norm(b)
-  theta = np.arccos(np.dot (ia, ib))
-  if theta < hooangle:
-    return [1, theta]
-  else:
-    return [0, 0.0]     
 
 
 #==============
@@ -142,3 +123,4 @@ else:
 print ("Sig ln\tMax ln\tCyc ct\File\n\n")
 print ("Please see hydrocycler_counter-%s.csv"%ts)
 print ("\n\nThank you for using Hydrocycler!\n\n")
+
