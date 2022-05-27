@@ -1,4 +1,2 @@
 1. Currently handles only space-delimited cartesian coordinate files.
 2. The ledger (.sig) file is pickle-library dependent because of the changes in the pickle implementation. It is best to regenerate it using hydrocycler_findall.py
-3. There is a lot of repetitive code. For now, each hydrocycler*.py file is a stand-alone program that only has one other file dependency (johnson.py)
-4. Hydrocycler_findall.py and johnson.py are both recursive code. At some point < 54H2O molecules, the program hits the python recursion limit. 
