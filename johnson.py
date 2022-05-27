@@ -1,16 +1,21 @@
+## Usage example:
+## graph = {0: [7, 3, 5], 1: [2], 2: [7, 1], 3: [0, 5], 4: [6, 8], 5: [0, 3, 7], 6: [4, 8], 7: [0, 2, 5, 8], 8: [4, 6, 7]}
+## print(tuple(simple_cycles(graph)))
+
+
+
 # A dependency-free version of NetworkX's implementation of Johnson's cycle finding algorithm
 # This implementation: https://github.com/qpwo/python-simple-cycles/blob/master/johnson.py
-# Original implementation from NetworkX: 
-# https://github.com/networkx/networkx/blob/master/networkx/algorithms/cycles.py#L109
-# See License at the end of this file.
 # Reference: Donald B Johnson. "Finding all the elementary circuits of a directed graph." SIAM Journal on Computing. 1975.
 
+import sys
+ 
+sys.setrecursionlimit(10**6)
 
 from collections import defaultdict
 
-def simple_cycles(G):
-    # Yield every elementary cycle in python graph G exactly once
-    # Expects a dictionary mapping from vertices to iterables of vertices
+def simple_cycles(G, progress="FALSE"):
+
     def _unblock(thisnode, blocked, B):
         stack = set([thisnode])
         while stack:
@@ -19,9 +24,14 @@ def simple_cycles(G):
                 blocked.remove(node)
                 stack.update(B[node])
                 B[node].clear()
-    G = {v: set(nbrs) for (v,nbrs) in G.items()} # make a copy of the graph
-    sccs = strongly_connected_components(G)
+    G = {v: set(nbrs) for (v,nbrs) in G.items()} 
+#    sccs = strongly_connected_components(G)       # using iterative instead
+    sccs = []
+    for sccmp in strongly_connected_components_iter(G):
+      sccs.append(sccmp)
+    i=0
     while sccs:
+        i = i + 1
         scc = sccs.pop()
         startnode = scc.pop()
         path=[startnode]
@@ -54,20 +64,30 @@ def simple_cycles(G):
                 path.pop()
         remove_node(G, startnode)
         H = subgraph(G, set(scc))
-        sccs.extend(strongly_connected_components(H))
+#        sccs.extend(strongly_connected_components(H)) # using iterative instead
+        sccs.extend(strongly_connected_components_iter(H))
+
+def remove_node(G, target):
+    del G[target]
+    for nbrs in G.values():
+        nbrs.discard(target)
+
+def subgraph(G, vertices):
+    return {v: G[v] & vertices for v in vertices}
+
+
+# Tarjan's algorithm for finding SCC's : recursive
+# Robert Tarjan. "Depth-first search and linear graph algorithms." SIAM journal on computing. 1972.
+# Code by Dries Verdegem, November 2012  http://www.logarithmic.net/pfh/blog/01208083168
 
 def strongly_connected_components(graph):
-    # Tarjan's algorithm for finding SCC's
-    # Robert Tarjan. "Depth-first search and linear graph algorithms." SIAM journal on computing. 1972.
-    # Code by Dries Verdegem, November 2012
-    # Downloaded from http://www.logarithmic.net/pfh/blog/01208083168
 
     index_counter = [0]
     stack = []
     lowlink = {}
     index = {}
     result = []
-    
+
     def _strong_connect(node):
         index[node] = index_counter[0]
         lowlink[node] = index_counter[0]
@@ -97,21 +117,46 @@ def strongly_connected_components(graph):
     
     return result
 
-def remove_node(G, target):
-    # Completely remove a node from the graph
-    # Expects values of G to be sets
-    del G[target]
-    for nbrs in G.values():
-        nbrs.discard(target)
+# Tarjan's algorithm for finding SCC's : non-recursive
+# Robert Tarjan. "Depth-first search and linear graph algorithms." SIAM journal on computing. 1972.
+# by Mark Dickinson https://code.activestate.com/recipes/578507/
 
-def subgraph(G, vertices):
-    # Get the subgraph of G induced by set vertices
-    # Expects values of G to be sets
-    return {v: G[v] & vertices for v in vertices}
+def strongly_connected_components_iter(graph):
 
-# Example:
-# graph = {0: [7, 3, 5], 1: [2], 2: [7, 1], 3: [0, 5], 4: [6, 8], 5: [0, 3, 7], 6: [4, 8], 7: [0, 2, 5, 8], 8: [4, 6, 7]}
-# print(tuple(simple_cycles(graph)))
+    identified = set()
+    stack = []
+    index = {}
+    boundaries = []
+
+    for v in graph:
+        if v not in index:
+            to_do = [('VISIT', v)]
+            while to_do:
+                operation_type, v = to_do.pop()
+                if operation_type == 'VISIT':
+                    index[v] = len(stack)
+                    stack.append(v)
+                    boundaries.append(index[v])
+                    to_do.append(('POSTVISIT', v))
+                    to_do.extend(
+                        reversed([('VISITEDGE', w) for w in graph[v]]))
+                elif operation_type == 'VISITEDGE':
+                    if v not in index:
+                        to_do.append(('VISIT', v))
+                    elif v not in identified:
+                        while index[v] < boundaries[-1]:
+                            boundaries.pop()
+                else:
+                    # operation_type == 'POSTVISIT'
+                    if boundaries[-1] == index[v]:
+                        boundaries.pop()
+                        scc = set(stack[index[v]:])
+                        del stack[index[v]:]
+                        identified.update(scc)
+                        yield scc
+
+# Original implementation from NetworkX: 
+# https://github.com/networkx/networkx/blob/master/networkx/algorithms/cycles.py#L109
 
 # Original License:
 # =======
@@ -153,3 +198,4 @@ def subgraph(G, vertices):
 #    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 #    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 #    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
