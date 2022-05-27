@@ -100,7 +100,6 @@ class XYZCycleDat:
        cycles = tuple(johnson.simple_cycles(ograph1))            
        cycles_srt = sorted(tuple(johnson.simple_cycles(ograph1))) 
        cycles_sig = tuple([ x for sublist in cycles_srt for x in sublist ])      # get its signature from cycles
-       print ("This configuration has signature: %s"%str(cycles_sig))
        if (cycles_sig) not in cyclesdict:
             cyclesdict[cycles_sig]="DONE"                 
             for cycle in cycles:                                                 # go through each cycle
@@ -112,6 +111,7 @@ class XYZCycleDat:
                 cycles_sig2 = tuple([ x for sublist2 in cycles2_srt for x in sublist2 ]) # get child signature
 
                 if (cycles_sig2) not in cyclesdict:                                      # save child
+                    print ("This configuration has signature: %s"%str(cycles_sig2))
                     nts = datetime.now().strftime("%y%m%d%H%M%S%f")         
                     filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
                     fd = open("%s-%s.xyz"%(filen,nts), "w")
