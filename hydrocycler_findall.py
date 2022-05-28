@@ -93,6 +93,7 @@ def fn_recursive ( files ):
 class XYZCycleDat:
 
     def __init__(self, pfilename ):
+       global cyclesdict
        self.pfilename = pfilename                                                # enter a file
        string = open ( pfilename, 'r' ).readlines()[2:] 
        [ocoords1, hcoords1, xcoords1, xyzdictmaster] = createarrays (string) 
@@ -102,6 +103,7 @@ class XYZCycleDat:
        cycles_sig = tuple([ x for sublist in cycles_srt for x in sublist ])      # get its signature from cycles
        if (cycles_sig) not in cyclesdict:
             cyclesdict[cycles_sig]="DONE"                 
+
             for cycle in cycles:                                                 # go through each cycle
                 xyzdict = copy.deepcopy(xyzdictmaster)   
                 xyzdict = modifycycle(cycle, xyzdict)                            # modify parent
@@ -110,7 +112,8 @@ class XYZCycleDat:
                 cycles2_srt = sorted(tuple(johnson.simple_cycles(ograph2)))
                 cycles_sig2 = tuple([ x for sublist2 in cycles2_srt for x in sublist2 ]) # get child signature
 
-                if (cycles_sig2) not in cyclesdict:                                      # save child
+                if (cycles_sig2) not in cyclesdict and (cycles_sig2) not in cyclesseen:  # save child
+                    cyclesseen[cycles_sig2]="DONE"                 
                     print ("This configuration has signature: %s"%str(cycles_sig2))
                     nts = datetime.now().strftime("%y%m%d%H%M%S%f")         
                     filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
@@ -127,7 +130,7 @@ def fn_iter ( files ):
       
     while files:                                     # open up current file
         file=files.pop()
-        filer=XYZCycleDat(file)
+        XYZCycleDat(file)
 
 #=============
 print (" Calculating directed graphs with |O-H> nodes and H-bond edges.")
@@ -139,6 +142,7 @@ batchjob = open("batchjob-%s.sh"%ts, "a")
 
 files = []
 cyclesdict = {}
+cyclesseen = {}
 
 argv = sys.argv[1:]
 argc  = len(sys.argv)
