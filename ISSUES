@@ -1,4 +1,4 @@
 1. Currently handles only space-delimited cartesian coordinate files.
-2. The ledger (.sig) file is pickle-library dependent because of the changes in the pickle implementation. It is best to regenerate it using hydrocycler_findall.py
+2. The ledger (.sig) file is pickle-library dependent because of the changes in the pickle implementation. You may regenerate it using hydrocycler_findall.py <xyz file>
 3. v1.1 has infinite loop. DO NOT USE and wait for the next release.
 4. This has only been tested with python 3.7. (For csh or zsh, you might need to do 'alias python=python3.7' if conda does not activate properly.)
