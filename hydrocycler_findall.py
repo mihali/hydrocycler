@@ -94,7 +94,8 @@ class XYZCycleDat:
 
     def __init__(self, pfilename ):
        global cyclesdict
-       self.pfilename = pfilename                                                # enter a file
+       global cyclesseen
+       self.pfilename = pfilename                                                # start from saved file
        string = open ( pfilename, 'r' ).readlines()[2:] 
        [ocoords1, hcoords1, xcoords1, xyzdictmaster] = createarrays (string) 
        [ograph1, trio1] = findcycles (ocoords1, hcoords1)
@@ -106,20 +107,20 @@ class XYZCycleDat:
 
             for cycle in cycles:                                                 # go through each cycle
                 xyzdict = copy.deepcopy(xyzdictmaster)   
-                xyzdict = modifycycle(cycle, xyzdict)                            # modify parent
+                xyzdict = modifycycle(cycle, xyzdict)                            # create child from parent
                 [ocoords2, hcoords2, xcoords2] = recreatearrays (xyzdict)
                 [ograph2, trio2] = findcycles (ocoords2, hcoords2)
                 cycles2_srt = sorted(tuple(johnson.simple_cycles(ograph2)))
                 cycles_sig2 = tuple([ x for sublist2 in cycles2_srt for x in sublist2 ]) # get child signature
 
-                if (cycles_sig2) not in cyclesdict and (cycles_sig2) not in cyclesseen:  # save child
+                if (cycles_sig2) not in cyclesdict and (cycles_sig2) not in cyclesseen:  # child is unique ...
                     cyclesseen[cycles_sig2]="DONE"                 
                     print ("This configuration has signature: %s"%str(cycles_sig2))
-                    nts = datetime.now().strftime("%y%m%d%H%M%S%f")         
+                    nts = datetime.now().strftime("%y%m%d%H%M%S%f")                      # ... so save child
                     filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
                     fd = open("%s-%s.xyz"%(filen,nts), "w")
                     print ("%s-%s.xyz"%(filen,nts))
-                    files.append("%s-%s.xyz"%(filen,nts))                           # put in stack
+                    files.append("%s-%s.xyz"%(filen,nts))                                # and put in stack
                     exportcartesian(xyzdict, fd)
                     exportbatchjob("%s-%s"%(filen,nts))
                     fd.close()
@@ -128,7 +129,7 @@ class XYZCycleDat:
 
 def fn_iter ( files ):  
       
-    while files:                                     # open up current file
+    while files:                                     
         file=files.pop()
         XYZCycleDat(file)
 
@@ -160,9 +161,6 @@ elif argc == 2:
             print ("\t%s\t%s"%(str(key),str(trio[key])) , )
         fn_iter ( files )                                            # recurses on list
         print ("\n\nThank you for using Hydrocycler!\n\n")
-        filen = str(os.path.splitext(filename)[0]).split("/")[-1]
-        sigdict_fd = open ("%s-%s.sig"%(filen,ts), "w")
-        print (cyclesdict, file = sigdict_fd )
         filen = str(os.path.splitext(filename)[0]).split("/")[-1] 
         sigdict_fd = open ("%s-%s.sig"%(filen,ts), "wb")
         pickle.dump (cyclesdict, sigdict_fd, protocol=pickle.HIGHEST_PROTOCOL )
