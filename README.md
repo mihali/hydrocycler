@@ -44,7 +44,7 @@ H-bonds can be determined from the cartesian coordinates of a cluster by measuri
 
 ## Dataset
 
-There are hydrocycler input and output files, and Gaussian output results, in the DATASET.tar file. To conserve space, Gaussian output files only contain extracts of the archive portions of successful Gaussian runs. (To make these more human readable, see **gt-parsearchive.py** in https://github.com/mihali/gt-x.)
+There are hydrocycler input and output files, and Gaussian output results, in the DATASET.tar.gz file. To conserve space, Gaussian output files only contain extracts of the archive portions of successful Gaussian runs. (To make these more human readable, see **gt-parsearchive.py** in https://github.com/mihali/gt-x.)
 
 ## References
 
