@@ -20,7 +20,7 @@ The input is a cartesian coordinate file and the outputs are cartesian coordinat
       
 * Usage: **python hydrocycler_findall.py file.xyz**                               
                                
-**hydrocycler_findall.py** is the workhorse program. It is an automated script that generates .xyz files of proto-polycyclomorphs. It also generates a ledger of signatures (.sig) file that defines the H-bonding family from which the input file belongs. This ledger file can then be used to test other configurations for H-bonding family membership. (See **hydrocycler_isamember.py** below for usage.) For convenience, **hydrocycler_findall.py** also creates a bash script for executing Gaussian .com files corresponding to the generated .xyz files. (To create .com files from .xyz files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
+**hydrocycler_findall.py** is the workhorse program and does an exhaustive cycle reversal search. It is an automated script that generates .xyz files of proto-polycyclomorphs. It also generates a ledger of signatures (.sig) file that defines the H-bonding family from which the input file belongs. This ledger file can then be used to test other configurations for H-bonding family membership. (See **hydrocycler_isamember.py** below for usage.) For convenience, **hydrocycler_findall.py** also creates a bash script for executing Gaussian .com files corresponding to the generated .xyz files. (To create .com files from .xyz files quickly, see **gt-xyz2com.py** in https://github.com/mihali/gt-x.)
 
                          
 * Usage: **python hydrocycler_isamember.py file0.sig fileA.xyz fileB.xyz ...**
