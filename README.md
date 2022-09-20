@@ -48,7 +48,7 @@ There are hydrocycler input and output files, and Gaussian output results, in th
 
 ## References
 
-1. Uses johnson.py derived from https://github.com/qpwo/python-simple-cycles and edited to compute Tarjan's algorithm iteratively.
+1. Uses johnson.py derived from https://github.com/qpwo/python-simple-cycles and modified to compute Tarjan's algorithm iteratively.
 2. Algorithm employed is from Johnson (1975) https://doi.org/10.1137/0204007
 
 
