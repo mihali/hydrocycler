@@ -2,8 +2,9 @@
 
 # Hydrocycler
 
-See [1] for accompanying preprint.
-[1]:https://chemrxiv.org/engage/chemrxiv/article-details/6338631a08470080b7906b55 
+See the accompanying [preprint][1].
+
+[1]: https://chemrxiv.org/engage/chemrxiv/article-details/6338631a08470080b7906b55 
 
 The Hydrocycler set of programs views the covalent bonding and H-bonding network as a directed graph in the direction of H-bonding donation; that is 
 
