@@ -2,7 +2,7 @@
 
 # Hydrocycler
 
-See the accompanying [preprint][1].
+See the accompanying [preprint][1] for an application example.
 
 [1]: https://chemrxiv.org/engage/chemrxiv/article-details/6338631a08470080b7906b55 
 
